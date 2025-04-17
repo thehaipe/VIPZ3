@@ -2,7 +2,7 @@
 #include <fstream>
 #include <cstring>
 #include "functions.h"
-
+//тестовий коміт
 using namespace std;
 
 int main() {
