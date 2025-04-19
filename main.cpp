@@ -2,23 +2,22 @@
 #include <fstream>
 #include <cstring>
 #include "functions.h"
-//тестовий коміт
+
 using namespace std;
 
 int main() {
     Student* pstHead = nullptr;
-    string openFileName; // Ім'я відкритого файлу
-
-    cout << "Виберіть дію:\n1 - Завантажити список студентів із файлу.\n2 - Створити новий список студентів.\n";
     int choice;
+
+    cout << "Виберіть дію:\n1 - Завантажити список студентів із файлу\n2 - Створити новий список студентів\n";
     cin >> choice;
 
     if (choice == 1) {
-        // Завантаження списку студентів із файлу
+        char szFilename[100];
         cout << "Введіть шлях до файлу: ";
-        cin >> openFileName; // Зберігаємо ім'я файлу
-        ifstream ifsFile(openFileName);
+        cin >> szFilename;
 
+        ifstream ifsFile(szFilename);
         if (!ifsFile.is_open()) {
             cerr << "Не вдалося відкрити файл.\n";
             return 1;
@@ -29,117 +28,67 @@ int main() {
             char szLastName[25], szFirstName[25], szDOB[20];
             int anGrades[5];
             parseStudent(szLine, szLastName, szFirstName, szDOB, anGrades);
-            append(&pstHead, szLastName, szFirstName, szDOB, anGrades); 
+            append(&pstHead, szLastName, szFirstName, szDOB, anGrades);
         }
         ifsFile.close();
 
         cout << "Повний список студентів:\n";
         display(pstHead);
-
-        bool continueActions = true;
-        while (continueActions) {
-            cout << "\nВиберіть дію:\n1 - Відсортувати список.\n2 - Відфільтрувати список.\n3 - Зберегти зміни до відкритого файлу.\n4 - Завершити.\n";
-            int action;
-            cin >> action;
-
-            if (action == 1) {
-                // Сортування списку
-                Student* pstSortedHead = sortStudents(pstHead);
-                clearList(pstHead);  // Очищаємо старий список
-                pstHead = pstSortedHead; // Оновлюємо основний список
-                cout << "\nВідсортований список студентів:\n";
-                display(pstHead);
-            } else if (action == 2) {
-                // Фільтрація списку
-                Student* pstFilteredHead = filterStudents(pstHead);
-                clearList(pstHead); // Очищаємо старий список
-                pstHead = pstFilteredHead; // Оновлюємо основний список
-                cout << "\nВідфільтрований список студентів:\n";
-                display(pstHead);
-            } else if (action == 3) {
-                // Збереження змін у файл
-                ofstream ofsFile(openFileName);
-                if (!ofsFile.is_open()) {
-                    cerr << "Не вдалося відкрити файл для запису.\n";
-                } else {
-                    writeStudentsToFile(pstHead, openFileName.c_str());
-                    cout << "Зміни успішно збережені до файлу \"" << openFileName << "\"!\n";
-                    ofsFile.close();
-                }
-            } else if (action == 4) {
-                // Завершення операцій
-                continueActions = false;
-            } else {
-                cout << "Невірний вибір. Спробуйте ще раз.\n";
-            }
-        }
-
-    } else if (choice == 2) {
-        // Створення нового списку студентів
+    }
+    else if (choice == 2) {
         char continueAdding = 'y';
-
-        // Абсолютний шлях
-        cout << "Введіть ім'я файлу для збереження списку (наприклад, students_new.txt): ";
-        char szFileName[100];
-        cin >> szFileName;
-
-        // Формуємо повний шлях
-        string fullPath = "/Users/mac/Desktop/Labs/VIPZ/Lab0/Lab0/";
-        fullPath += szFileName;
-
         while (continueAdding == 'y') {
             addStudent(&pstHead);
             cout << "Додати ще одного студента? (y/n): ";
             cin >> continueAdding;
         }
+    }
 
-        // Збереження списку до файлу
-        writeStudentsToFile(pstHead, fullPath.c_str());
+    bool continueActions = true;
+    while (continueActions) {
+        cout << "\nВиберіть дію:\n1 - Відсортувати список\n2 - Відфільтрувати список\n3 - Зберегти список\n4 - Видалити студента\n5 - Завершити\n";
+        int action;
+        cin >> action;
 
-        cout << "Список успішно збережено у файл \"" << fullPath << "\"!\n";
-        cout << "Повний список студентів:\n";
-        display(pstHead);
-
-        bool continueActions = true;
-        while (continueActions) {
-            cout << "\nВиберіть дію:\n1 - Відсортувати список.\n2 - Відфільтрувати список.\n3 - Зберегти зміни до файлу.\n4 - Завершити.\n";
-            int action;
-            cin >> action;
-
-            if (action == 1) {
-                // Сортування списку
+        switch (action) {
+            case 1: {
                 Student* pstSortedHead = sortStudents(pstHead);
-                clearList(pstHead); // Очищаємо старий список
-                pstHead = pstSortedHead; // Оновлюємо основний список
-                cout << "\nВідсортований список студентів:\n";
+                clearList(pstHead);
+                pstHead = pstSortedHead;
+                cout << "\nВідсортований список:\n";
                 display(pstHead);
-            } else if (action == 2) {
-                // Фільтрація списку
-                Student* pstFilteredHead = filterStudents(pstHead);
-                clearList(pstHead); // Очищаємо старий список
-                pstHead = pstFilteredHead; // Оновлюємо основний список
-                cout << "\nВідфільтрований список студентів:\n";
-                display(pstHead);
-            } else if (action == 3) {
-                // Збереження змін у файл
-                ofstream ofsFile(fullPath);
-                if (!ofsFile.is_open()) {
-                    cerr << "Не вдалося відкрити файл для запису.\n";
-                } else {
-                    writeStudentsToFile(pstHead, fullPath.c_str());
-                    cout << "Зміни успішно збережені до файлу \"" << fullPath << "\"!\n";
-                    ofsFile.close();
-                }
-            } else if (action == 4) {
-                // Завершення операцій
-                continueActions = false;
-            } else {
-                cout << "Невірний вибір. Спробуйте ще раз.\n";
+                break;
             }
+            case 2: {
+                Student* pstFilteredHead = filterStudents(pstHead);
+                clearList(pstHead);
+                pstHead = pstFilteredHead;
+                cout << "\nВідфільтрований список:\n";
+                display(pstHead);
+                break;
+            }
+            case 3: {
+                writeStudentsToFile(pstHead);
+                break;
+            }
+            case 4: {
+                char szLastName[25], szFirstName[25];
+                cout << "Введіть прізвище студента для видалення: ";
+                cin >> szLastName;
+                cout << "Введіть ім'я студента для видалення: ";
+                cin >> szFirstName;
+                deleteStudent(&pstHead, szLastName, szFirstName);
+                break;
+            }
+            case 5: {
+                continueActions = false;
+                break;
+            }
+            default:
+                cout << "Невірний вибір\n";
         }
     }
 
-    // Очищення пам'яті перед завершенням
     clearList(pstHead);
     return 0;
 }

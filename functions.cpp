@@ -59,7 +59,7 @@ Student* filterStudents(const Student* pstHead) {
     while (pCurrent != nullptr) {
         bool hasLowGrades = false;
         for (int i = 0; i < 5; ++i) {
-            if (pCurrent->anGrades[i] <= 3) {
+            if (pCurrent->anGrades[1] == 2 && pCurrent->anGrades[2] == 3 && pCurrent->anGrades[3] == 4 && pCurrent->anGrades[4] == 5) {
                 hasLowGrades = true;
                 break;
             }
@@ -166,16 +166,16 @@ void addStudent(Student** ppstHead) {
     char szFirstName[25], szLastName[25], szDOB[20];
     int anGrades[5];
 
-    cout << "Введіть прізвище: ";
+    cout << "Введіть прізвище: (максимум 25 символів)";
     cin >> szLastName;
     
-    cout << "Введіть ім'я: ";
+    cout << "Введіть ім'я: (максимум 25 символів)";
     cin >> szFirstName;
 
-    cout << "Введіть дату народження (рррр-мм-дд): ";
+    cout << "Введіть дату народження (дд.мм.рррр): ";
     cin >> szDOB;
 
-    cout << "Введіть 5 оцінок: ";
+    cout << "Введіть 5 оцінок через пробіл: (діапазон від 1 до 5)";
     for (int i = 0; i < 5; ++i) {
         cin >> anGrades[i];
     }
@@ -237,17 +237,26 @@ void clearList(Student* pstHead) {
 // - szFilename: шлях до файлу, куди потрібно записати дані.
 // Якщо файл не відкривається для запису, виводить повідомлення про помилку.
 
-void writeStudentsToFile(const Student* pstHead, const char* szFilename) {
-    ofstream outFile(szFilename);
+void writeStudentsToFile(const Student* pstHead) {
+    // Запитуємо ім'я файлу у користувача
+    char szFilename[100];
+    cout << "Введіть ім'я файлу для збереження (наприклад, students_new.txt): ";
+    cin >> szFilename;
+
+    // Формуємо повний шлях (можна адаптувати під вашу структуру папок)
+    string fullPath = "/Users/mac/Desktop/Labs/VIPZ/Lab0/Lab0/";
+    fullPath += szFilename;
+
+    ofstream outFile(fullPath);
     if (!outFile) {
-        cerr << "Помилка відкриття файлу для запису: " << szFilename << endl;
+        cerr << "Помилка відкриття файлу для запису: " << fullPath << endl;
         return;
     }
 
     const Student* pCurrent = pstHead;
     while (pCurrent != nullptr) {
-        outFile << pCurrent->szLastName << " "    // Прізвище перше
-                << pCurrent->szFirstName << " "   // Ім'я друге
+        outFile << pCurrent->szLastName << " "
+                << pCurrent->szFirstName << " "
                 << pCurrent->szDOB << " ";
         for (int i = 0; i < 5; ++i) {
             outFile << pCurrent->anGrades[i] << " ";
@@ -257,6 +266,6 @@ void writeStudentsToFile(const Student* pstHead, const char* szFilename) {
     }
 
     outFile.close();
-    cout << "Дані успішно записані у файл: " << szFilename << endl;
+    cout << "Дані успішно збережено у файл: " << fullPath << endl;
 }
 //--------------------------------------

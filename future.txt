@@ -1,0 +1,16 @@
+Kateryniuk Ihor         2037.05.25   5 4 3 4 5
+Hrechko Khrystyna       2036.02.17   2 3 3 4 5
+Buryk Mykhailo          2038.11.01   4 4 3 5 4
+Kozak Artem             2039.12.25   1 2 3 4 5
+Huzar Sviatoslav        2036.09.05   5 5 4 5 4
+Bohaiets Bohdan         2037.08.24   3 4 3 2 4
+Miedientsov Valentyn    2077.07.28   3 4 4 3 3
+Kalychak Maksym         2038.11.12   4 4 5 4 5
+Krekhovetskyi Oleksandr 2038.10.09   3 4 5 2 4
+Oliinyk Volodymyr       2036.02.01   4 5 2 3 4
+Dub Roman               2037.06.18   3 3 4 2 3
+Myshchyshyn Artem       2036.04.11   1 2 3 4 5
+Holets Roman            2036.09.17   4 4 3 5 3
+Kobrin Pavlo            2037.05.31   3 3 4 2 4
+Bida Petro              2036.01.03   3 4 5 2 5
+
