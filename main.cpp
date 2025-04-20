@@ -100,6 +100,7 @@ int main() {
             char continueAdding = 'y';
             while (continueAdding == 'y') {
                 addStudent(&pstHead);
+                display(pstHead);
                 cout << "Додати ще одного студента? (y/n): ";
                 cin >> continueAdding;
             }

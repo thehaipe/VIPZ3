@@ -5,7 +5,7 @@
 #include <fstream>
 #include <ctime>
 #include "functions.h"
-
+#include <limits> // для std::numeric_limits - ПРОБЛЕМА ЗАБИВАННЯ БУФЕРУ ПРИ ВВОДІ З КЛАВІАТУРУ
 using namespace std;
 //Нова функція, перевірка імʼя на коректність.
 bool isValidName(const char* name) {
@@ -76,10 +76,20 @@ void parseStudent(const char* szLine, char* szLastName, char* szFirstName, char*
         return;
     }
 
-    strncpy(szLastName, isValidName(tempLastName) ? tempLastName : "wrong data", 150);
+    // Перевірка довжини прізвища
+    if (strlen(tempLastName) > 150) {
+        strcpy(szLastName, "wrong data");
+    } else {
+        strncpy(szLastName, isValidName(tempLastName) ? tempLastName : "wrong data", 150);
+    }
     szLastName[150] = '\0';
     
-    strncpy(szFirstName, isValidName(tempFirstName) ? tempFirstName : "wrong data", 150);
+    // Перевірка довжини імені
+    if (strlen(tempFirstName) > 150) {
+        strcpy(szFirstName, "wrong data");
+    } else {
+        strncpy(szFirstName, isValidName(tempFirstName) ? tempFirstName : "wrong data", 150);
+    }
     szFirstName[150] = '\0';
     
     strncpy(szDOB, isValidDate(tempDOB) ? tempDOB : "wrong data", 19);
@@ -89,7 +99,7 @@ void parseStudent(const char* szLine, char* szLastName, char* szFirstName, char*
         anGrades[i] = isValidGrade(tempGrades[i]) ? tempGrades[i] : 0;
     }
 }
-//--------------------------------------
+//-------------------------------------
 // Додає нового студента у кінець однозв'язного списку.
 // Параметри:
 // - ppstHead: вказівник на голову списку студентів.
@@ -233,23 +243,38 @@ void display(const Student* pstHead) {
         pCurrent = pCurrent->pstNext;
     }
 }
+void safeGetline(char* buffer, int size) {
+    cin.getline(buffer, size);
+    if (cin.gcount() == size - 1 && buffer[size - 2] != '\n') {
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+}
+
 //--------------------------------------
 // Додає нового студента до списку шляхом введення даних з клавіатури.
 // Параметри:
 // - ppstHead: вказівник на голову списку, до якого буде доданий студент.
 void addStudent(Student** ppstHead) {
+    string firstNameStr, lastNameStr, dobStr;
     char szFirstName[151], szLastName[151], szDOB[20];
     int anGrades[5];
 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     cout << "Введіть прізвище (до 150 символів): ";
-    cin.ignore();
-    cin.getline(szLastName, 151);
-    
+    getline(cin, lastNameStr);
+    strncpy(szLastName, lastNameStr.c_str(), 150);
+    szLastName[150] = '\0'; // Безпека
+
     cout << "Введіть ім'я (до 150 символів): ";
-    cin.getline(szFirstName, 151);
+    getline(cin, firstNameStr);
+    strncpy(szFirstName, firstNameStr.c_str(), 150);
+    szFirstName[150] = '\0';
 
     cout << "Введіть дату народження (дд.мм.рррр): ";
-    cin >> szDOB;
+    getline(cin, dobStr);
+    strncpy(szDOB, dobStr.c_str(), 19);
+    szDOB[19] = '\0';
 
     for (int i = 0; i < 5; ++i) {
         do {
@@ -268,6 +293,10 @@ void addStudent(Student** ppstHead) {
 
     append(ppstHead, szLastName, szFirstName, szDOB, anGrades);
 }
+
+
+
+
 //--------------------------------------
 // Видаляє студента з однозв'язного списку за прізвищем та імʼям.
 // Параметри:
