@@ -14,6 +14,10 @@ int main() {
         cin >> choice;
 
         if (choice == 1) {
+            // Хотфікс: очищення попереднього списку перед завантаженням нового
+            clearList(pstHead);
+            pstHead = nullptr;
+
             char szFilename[100];
             cout << "Введіть шлях до файлу: ";
             cin >> szFilename;
@@ -97,8 +101,12 @@ int main() {
             }
         }
         else if (choice == 2) {
+            // Хотфікс: очищення попереднього списку перед створенням нового
+            clearList(pstHead);
+            pstHead = nullptr;
+
             char continueAdding = 'y';
-            while (continueAdding == 'y') {
+            while (continueAdding == 'y' || continueAdding == 'Y') {  // Хотфікс: додано перевірку на 'Y'
                 addStudent(&pstHead);
                 display(pstHead);
                 cout << "Додати ще одного студента? (y/n): ";
@@ -117,7 +125,7 @@ int main() {
                         clearList(pstHead);
                         pstHead = pstSortedHead;
                         cout << "\nВідсортований список:\n";
-                        display(pstHead);
+                        display(pstHead);  // Хотфікс: виправлено - було clearList замість display
                         break;
                     }
                     case 2: {
