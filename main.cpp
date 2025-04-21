@@ -45,7 +45,7 @@ int main() {
             }
 
             cout << "Повний список студентів:\n";
-            display(pstHead);
+            display(pstHead); //debug point 
 
             bool continueActions = true;
             while (continueActions) {
@@ -108,7 +108,7 @@ int main() {
             char continueAdding = 'y';
             while (continueAdding == 'y' || continueAdding == 'Y') {  // Хотфікс: додано перевірку на 'Y'
                 addStudent(&pstHead);
-                display(pstHead);
+                display(pstHead); //дебаг поінт
                 cout << "Додати ще одного студента? (y/n): ";
                 cin >> continueAdding;
             }
